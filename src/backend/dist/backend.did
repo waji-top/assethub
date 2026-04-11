@@ -1,0 +1,139 @@
+type UserTier = 
+ variant {
+   free;
+   premium;
+ };
+type UserPublic = 
+ record {
+   createdAt: Timestamp;
+   downloadCount: nat;
+   downloadLimit: nat;
+   email: text;
+   id: UserId;
+   tier: UserTier;
+   username: text;
+ };
+type UserId = principal;
+type Timestamp = int;
+type SubscriptionStatus = 
+ record {
+   sessionId: opt text;
+   tier: UserTier;
+ };
+type SortOrder = 
+ variant {
+   mostDownloaded;
+   newest;
+   relevance;
+ };
+type PageRequest = 
+ record {
+   limit: nat;
+   offset: nat;
+ };
+type License = 
+ variant {
+   free;
+   premium;
+ };
+type DownloadRecord = 
+ record {
+   assetId: AssetId;
+   assetTitle: text;
+   downloadedAt: Timestamp;
+   format: text;
+ };
+type CollectionWithAssets = 
+ record {
+   assets: vec Asset;
+   createdAt: Timestamp;
+   id: CollectionId;
+   name: text;
+   userId: UserId;
+ };
+type CollectionPublic = 
+ record {
+   assetIds: vec AssetId;
+   createdAt: Timestamp;
+   id: CollectionId;
+   name: text;
+   userId: UserId;
+ };
+type CollectionId = nat;
+type AssetType = 
+ variant {
+   font;
+   icon;
+   illustration;
+   photo;
+   template;
+   threeD;
+   vector;
+ };
+type AssetPage = 
+ record {
+   items: vec Asset;
+   offset: nat;
+   total: nat;
+ };
+type AssetId = nat;
+type AssetFilter = 
+ record {
+   assetType: opt AssetType;
+   category: opt text;
+   license: opt License;
+   orientation: opt variant {
+                      landscape;
+                      portrait;
+                      square;
+                    };
+   tags: vec text;
+ };
+type AssetFile = 
+ record {
+   format: text;
+   license: License;
+   url: text;
+ };
+type Asset = 
+ record {
+   assetType: AssetType;
+   authorId: UserId;
+   authorName: text;
+   category: text;
+   createdAt: Timestamp;
+   description: text;
+   dimensions: opt record {
+                     height: nat;
+                     width: nat;
+                   };
+   downloadCount: nat;
+   fileFormats: vec AssetFile;
+   id: AssetId;
+   license: License;
+   previewUrls: vec text;
+   tags: vec text;
+   thumbnailUrl: text;
+   title: text;
+ };
+service : {
+  activatePremium: (sessionId: text) -> (bool);
+  addAssetToCollection: (id: CollectionId, assetId: AssetId) -> ();
+  canDownload: () -> (bool) query;
+  createCollection: (name: text) -> (CollectionPublic);
+  deleteCollection: (id: CollectionId) -> ();
+  getAsset: (id: AssetId) -> (opt Asset) query;
+  getCollectionWithAssets: (id: CollectionId) -> (opt CollectionWithAssets);
+  getMyProfile: () -> (opt UserPublic) query;
+  getSubscriptionStatus: () -> (SubscriptionStatus) query;
+  incrementDownloadCount: (id: AssetId) -> ();
+  listAssets: (filter: AssetFilter, sort: SortOrder, page: PageRequest) ->
+   (AssetPage) query;
+  listMyCollections: () -> (vec CollectionPublic) query;
+  listMyDownloads: () -> (vec DownloadRecord) query;
+  recordStripeSession: (sessionId: text) -> ();
+  removeAssetFromCollection: (id: CollectionId, assetId: AssetId) -> ();
+  searchAssets: (keyword: text, page: PageRequest) -> (AssetPage) query;
+  trackDownload: (assetId: AssetId, format: text) -> (bool);
+  upsertUser: (username: text, email: text) -> (UserPublic);
+}

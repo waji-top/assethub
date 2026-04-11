@@ -1,0 +1,109 @@
+// Version: 1.0.0
+type AssetFile__491042092 =
+  {format : Text; license : License__1001945836; url : Text};
+type AssetId__131908388 = Nat;
+type AssetType__51597108 =
+  {#font; #icon; #illustration; #photo; #template; #threeD; #vector};
+type Asset__320185087 =
+  {
+    assetType : AssetType__51597108;
+    authorId : UserId__158757552;
+    authorName : Text;
+    category : Text;
+    createdAt : Timestamp__301639476;
+    description : Text;
+    dimensions : ?{height : Nat; width : Nat};
+    downloadCount : Nat;
+    fileFormats : [AssetFile__491042092];
+    id : AssetId__131908388;
+    license : License__1001945836;
+    previewUrls : [Text];
+    tags : [Text];
+    thumbnailUrl : Text;
+    title : Text
+  };
+type CollectionId__634139010 = Nat;
+type Collection__211048818 =
+  {
+    var assetIds : [AssetId__131908388];
+    createdAt : Timestamp__301639476;
+    id : CollectionId__634139010;
+    var name : Text;
+    userId : UserId__158757552
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DownloadRecord__124161380 =
+  {
+    assetId : AssetId__131908388;
+    assetTitle : Text;
+    downloadedAt : Timestamp__301639476;
+    format : Text
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type License__1001945836 = {#free; #premium};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type StripeSession__911546527 =
+  {
+    createdAt : Timestamp__301639476;
+    sessionId : Text;
+    userId : UserId__158757552
+  };
+type Timestamp__301639476 = Int;
+type UserId__158757552 = Principal;
+type UserTier__529573935 = {#free; #premium};
+type User__98118558 =
+  {
+    createdAt : Timestamp__301639476;
+    var downloadCount : Nat;
+    downloadLimit : Nat;
+    var email : Text;
+    id : UserId__158757552;
+    var tier : UserTier__529573935;
+    var username : Text
+  };
+actor {
+  stable assets :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Asset__320185087]];
+      var elementIndex : Nat__490723111
+    };
+  stable collections :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Collection__211048818]];
+      var elementIndex : Nat__490723111
+    };
+  stable downloads :
+    {
+      var root :
+        Node__46230540<UserId__158757552,
+                        List__415060402<DownloadRecord__124161380>>;
+      var size : Nat__490723111
+    };
+  stable var nextAssetId : Nat;
+  stable var nextCollectionId : Nat;
+  stable sessions :
+    {
+      var root : Node__46230540<Text, StripeSession__911546527>;
+      var size : Nat__490723111
+    };
+  stable users :
+    {
+      var root : Node__46230540<UserId__158757552, User__98118558>;
+      var size : Nat__490723111
+    }
+};

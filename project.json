@@ -1,0 +1,24 @@
+{
+  "overview": "A Freepik-style digital asset marketplace where users can browse, search, filter, download, and save vectors, photos, illustrations, templates, icons, and more. Features user accounts, collections, download history, and premium subscription tiers.",
+  "features": [
+    "Full-text search with filters by type, category, license, and orientation",
+    "Asset grid/list browsing with pagination",
+    "Asset detail page with preview, metadata, and download options",
+    "User accounts via Internet Identity",
+    "Download history and collections management",
+    "Free and Premium subscription tiers",
+    "Stripe-powered premium upgrade checkout",
+    "Homepage with trending categories, featured collections, and curated picks"
+  ],
+  "category": "marketplace",
+  "tags": [
+    "ecommerce",
+    "marketplace",
+    "digital-assets",
+    "stock",
+    "freepik",
+    "downloads",
+    "subscriptions"
+  ],
+  "last_updated": "2026-04-11T03:01:23.518Z"
+}
